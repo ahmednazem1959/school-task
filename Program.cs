@@ -1,8 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace taskschool
 {
     public class Student
@@ -72,18 +67,18 @@ namespace taskschool
         }
         public Course GetMostEnrolledCourse()
         {
-            return _courses.AsParallel()
-                           .OrderByDescending(c => c.EnrolledStudents.Count)
-                           .FirstOrDefault();
+            return _courses
+                    .OrderByDescending(c => c.EnrolledStudents.Count)
+                    .FirstOrDefault();
         }
         public IEnumerable<dynamic> GetCourseEnrollmentCounts()
         {
-            return _courses.AsParallel()
-                           .Select(c => new
-                           {
-                               Name = c.Title,
-                               Count = c.EnrolledStudents.Count
-                           });
+            return _courses
+                    .Select(c => new
+                    {
+                        Name = c.Title,
+                        Count = c.EnrolledStudents.Count
+                    });
         }
         public bool DoesTeacherHaveMultipleCourses(int teacherId)
         {
@@ -100,7 +95,6 @@ namespace taskschool
             if (teacher == null) return 0;
 
             return teacher.Courses
-                          .AsParallel()
                           .Sum(c => c.EnrolledStudents.Count);
         }
         public void RunReports()
@@ -113,7 +107,7 @@ namespace taskschool
                 Console.WriteLine($"- Course: {mostEnrolled.Title}, Students: {mostEnrolled.EnrolledStudents.Count}");
             }
 
-            Console.WriteLine($"\n3. Enrollment Count Per Course (PLINQ):");
+            Console.WriteLine($"\n3. Enrollment Count Per Course");
             var enrollmentCounts = GetCourseEnrollmentCounts();
             foreach (dynamic item in enrollmentCounts)
             {
